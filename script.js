@@ -19,8 +19,11 @@ async function getCapital() {
 
 async function searchCountry(e) {
   e.preventDefault();
+
   try {
     const url = `https://restcountries.com/v3.1/name/${countryInput.value}`;
+
+    // countryInput.remove(countryInput.selectedIndex);
 
     const response = await fetch(url);
     const data = await response.json();
@@ -68,7 +71,9 @@ async function getWeather() {
 
     addedWeather.innerHTML = `
     <img src="${iconUrl}">
-    Tempratur in ${data.name}: ${data.main.temp} C, ${data.weather[0].description}
+    Tempratur in ${data.name}: ${parseInt(data.main.temp)} C, ${
+      data.weather[0].description
+    }
     `;
 
     main.appendChild(addedWeather);
@@ -76,4 +81,8 @@ async function getWeather() {
     console.log(err);
     document.getElementById("weather").textContent = err.message;
   }
+}
+
+function saveTasks() {
+  localStorage.setItem("tasks", JSON.stringify(tasks));
 }
