@@ -1,6 +1,7 @@
 const countryInput = document.getElementById("country-input");
 const output = document.getElementById("output");
 const button = document.querySelector("button");
+const main = document.querySelector("main");
 
 button.addEventListener("click", searchCountry);
 
@@ -26,15 +27,18 @@ async function searchCountry(e) {
     const country = data[0];
     console.log(country);
 
-    await getWeather();
+    const addedCountry = document.createElement("div");
 
-    output.innerHTML = `<h2>${country.name.common} ${country.flag}</h2>
+    addedCountry.innerHTML = `<h2>${country.name.common} ${country.flag}</h2>
     <p>Capital: ${country.capital}</p>
     <p>Region: ${country.region}</p>
     <p>Language : ${Object.values(country.languages)}</p>
     <p>Currency: ${Object.values(country.currencies)[0].name}</p>
     <p>Population: ${country.population.toLocaleString("de-DE")}</p>
     <a href="${country.maps.googleMaps}">Map</a>`;
+
+    main.appendChild(addedCountry);
+    await getWeather();
     //
   } catch (error) {
     console.log(error);
@@ -57,12 +61,15 @@ async function getWeather() {
 
     const iconUrl = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
 
-    const result = `
+    const addedWeather = document.createElement("div");
+    addedWeather.classList.add("weather-box");
+
+    addedWeather.innerHTML = `
     <img src="${iconUrl}">
     Tempratur in ${data.name}: ${data.main.temp} C, ${data.weather[0].description}
     `;
 
-    document.getElementById("weather").innerHTML = result;
+    main.appendChild(addedWeather);
   } catch (err) {
     console.log(err);
     document.getElementById("weather").textContent = err.message;
