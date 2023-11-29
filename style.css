@@ -18,7 +18,7 @@ body {
 
 main {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
 }
@@ -110,6 +110,6 @@ a:hover {
 }
 
 .weather-box {
-  margin-bottom: 20px;
-  background-color: #b6895bd6;
+  margin: 20px;
+  background-color: #b6895bf0;
 }

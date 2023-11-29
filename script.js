@@ -1,34 +1,29 @@
+// Variablen & Eventlistener
+
 const countryInput = document.getElementById("country-input");
 const output = document.getElementById("output");
 const button = document.querySelector("button");
 const main = document.querySelector("main");
+const countryPosts = JSON.parse(localStorage.getItem("country")) || [];
 
 button.addEventListener("click", searchCountry);
 
-async function getCapital() {
-  const country = countryInput.value;
-  const url = `https://restcountries.com/v3.1/name/${country}`;
-
-  const response = await fetch(url);
-  const data = await response.json();
-
-  const capital = data[0].capital;
-
-  return capital[0];
-}
+// SEARCH COUNTRY UND GET WEATHER FUNKTIONEN
 
 async function searchCountry(e) {
   e.preventDefault();
 
   try {
-    const url = `https://restcountries.com/v3.1/name/${countryInput.value}`;
+    // FETCH
 
-    // countryInput.remove(countryInput.selectedIndex);
+    const url = `https://restcountries.com/v3.1/name/${countryInput.value}`;
 
     const response = await fetch(url);
     const data = await response.json();
     const country = data[0];
     console.log(country);
+
+    //DIV WIRD ERSTELLT   &  AN ANFANG VON MAIN GESETZT
 
     const addedCountry = document.createElement("div");
 
@@ -42,20 +37,38 @@ async function searchCountry(e) {
       country.maps.googleMaps
     }" target="blank" >Click here for Map</a>`;
 
-    main.appendChild(addedCountry);
-    await getWeather();
+    await getWeather(country.capital, addedCountry);
+
+    main.prepend(addedCountry);
+
+    // ARRAY MIT COUNTRIES WIRD ERSTELLT UND IN LOCAL STORAGE GESPEICHERT
+
+    countryPosts.push({
+      name: country.name.common,
+      flag: country.flag,
+      capital: country.capital,
+      region: country.region,
+      language: Object.values(country.languages),
+      currency: Object.values(country.currencies)[0].name,
+      population: country.population.toLocaleString("de-DE"),
+      map: country.maps.googleMaps,
+    });
+
+    localStorage.setItem("country", JSON.stringify(countryPosts));
+
+    console.log(JSON.parse(localStorage.getItem("country")));
     //
   } catch (error) {
     console.log(error);
   }
 }
 
-async function getWeather() {
+async function getWeather(city, container) {
   try {
+    // FETCH
     const apiKey = "71f05fa9a67003870792a089b0de04e9";
-    const cityInput = await getCapital();
-    console.log(cityInput);
-    const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityInput}&appid=${apiKey}&units=metric`;
+
+    const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
 
     const response = await fetch(weatherUrl);
     const data = await response.json();
@@ -66,23 +79,42 @@ async function getWeather() {
 
     const iconUrl = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
 
-    const addedWeather = document.createElement("div");
-    addedWeather.classList.add("weather-box");
+    // INNER HTML WIRD ERSTELLT
 
-    addedWeather.innerHTML = `
+    container.innerHTML += `
     <img src="${iconUrl}">
     Tempratur in ${data.name}: ${parseInt(data.main.temp)} C, ${
       data.weather[0].description
     }
     `;
 
-    main.appendChild(addedWeather);
+    container.classList.add("weather-box");
+
+    main.prepend(container);
   } catch (err) {
     console.log(err);
-    document.getElementById("weather").textContent = err.message;
+    document.querySelector("main").textContent = err.message;
   }
 }
 
-function saveTasks() {
-  localStorage.setItem("tasks", JSON.stringify(tasks));
+// LOCAL STORAGE
+
+function getLocalStorage() {
+  // COUNTRY POSTS ARRAY WIRD IN DOM UMGEWANDELT
+  countryPosts.map((country) => {
+    console.log(country);
+    const addedCountry = document.createElement("div");
+    addedCountry.innerHTML += `<h2>${country.name} ${country.flag}</h2>
+      <p>Capital: ${country.capital}</p>
+      <p>Region: ${country.region}</p>
+      <p>Language : ${country.language}</p>
+      <p>Currency: ${country.currency}</p>
+      <p>Population: ${country.population}</p>
+      <a href="${country.map}" target="blank" >Click here for Map</a>`;
+
+    getWeather(country.capital, addedCountry);
+    main.appendChild(addedCountry);
+  });
 }
+
+window.addEventListener("DOMContentLoaded", getLocalStorage);
