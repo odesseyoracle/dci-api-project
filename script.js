@@ -10,11 +10,10 @@ async function getCapital() {
 
   const response = await fetch(url);
   const data = await response.json();
-  console.log(data[0].capital);
 
   const capital = data[0].capital;
 
-  return capital;
+  return capital[0];
 }
 
 async function searchCountry(e) {
