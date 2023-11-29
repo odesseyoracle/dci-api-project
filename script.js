@@ -14,6 +14,13 @@ async function searchCountry(e) {
     const data = await response.json();
     console.log(data);
 
-    output.textContent = data[0].name.common;
+    output.innerHTML = `<h2>${data[0].name.common} ${data[0].flag}</h2>
+    <p>Capital: ${data[0].capital}</p>
+    <p>Region: ${data[0].region}</p>
+    <p>Language : ${Object.values(data[0].languages)}</p>
+    <p>Currency: ${Object.values(data[0].currencies)[0].name}</p>
+    <p>Population: ${data[0].population.toLocaleString("de-DE")}</p>
+    <a href="${data[0].maps.googleMaps}">Map</a>`;
+    //
   } catch {}
 }
