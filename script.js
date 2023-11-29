@@ -35,7 +35,9 @@ async function searchCountry(e) {
     <p>Language : ${Object.values(country.languages)}</p>
     <p>Currency: ${Object.values(country.currencies)[0].name}</p>
     <p>Population: ${country.population.toLocaleString("de-DE")}</p>
-    <a href="${country.maps.googleMaps}">Map</a>`;
+    <a href="${
+      country.maps.googleMaps
+    }" target="blank" >Click here for Map</a>`;
 
     main.appendChild(addedCountry);
     await getWeather();
