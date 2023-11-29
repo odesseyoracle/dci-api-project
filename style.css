@@ -1,6 +1,6 @@
 /* Small CSS for Giaco */
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f4f4f4;
   color: #333;
   margin: 20px;
@@ -8,9 +8,8 @@ body {
 }
 
 h1 {
-  color: #007BFF;
+  color: #007bff;
 }
-
 
 form {
   background-color: #fff;
@@ -25,14 +24,15 @@ label {
   color: #555;
 }
 
-select, button {
+select,
+button {
   font-size: 16px;
   padding: 10px;
   margin-bottom: 15px;
 }
 
 button {
-  background-color: #007BFF;
+  background-color: #007bff;
   color: #fff;
   cursor: pointer;
   border: none;
@@ -48,11 +48,11 @@ button:hover {
 }
 
 #output h2 {
-  color: #007BFF;
+  color: #007bff;
 }
 
 a {
-  color: #007BFF;
+  color: #007bff;
   text-decoration: none;
   display: inline-block;
   margin-top: 10px;
