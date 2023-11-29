@@ -32,7 +32,7 @@ async function searchCountry(e) {
     <p>Capital: ${country.capital}</p>
     <p>Region: ${country.region}</p>
     <p>Language : ${Object.values(country.languages)}</p>
-    <p>Currency: ${Object.values(country.currencies).name}</p>
+    <p>Currency: ${Object.values(country.currencies)[0].name}</p>
     <p>Population: ${country.population.toLocaleString("de-DE")}</p>
     <a href="${country.maps.googleMaps}">Map</a>`;
     //
