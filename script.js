@@ -4,35 +4,48 @@ const button = document.querySelector("button");
 
 button.addEventListener("click", searchCountry);
 
+async function getCapital() {
+  const country = countryInput.value;
+  const url = `https://restcountries.com/v3.1/name/${country}`;
+
+  const response = await fetch(url);
+  const data = await response.json();
+  console.log(data[0].capital);
+
+  const capital = data[0].capital;
+
+  return capital;
+}
+
 async function searchCountry(e) {
   e.preventDefault();
   try {
-    const country = countryInput.value;
-    const url = `https://restcountries.com/v3.1/name/${country}`;
-
-    const capital = data[0].capital;
+    const url = `https://restcountries.com/v3.1/name/${countryInput.value}`;
 
     const response = await fetch(url);
     const data = await response.json();
-    console.log(data);
+    const country = data[0];
+    console.log(country);
 
-    getWeather();
+    await getWeather();
 
-    output.innerHTML = `<h2>${data[0].name.common} ${data[0].flag}</h2>
-    <p>Capital:<span id="capital"> ${data[0].capital}</span></p>
-    <p>Region: ${data[0].region}</p>
-    <p>Language : ${Object.values(data[0].languages)}</p>
-    <p>Currency: ${Object.values(data[0].currencies)[0].name}</p>
-    <p>Population: ${data[0].population.toLocaleString("de-DE")}</p>
-    <a href="${data[0].maps.googleMaps}">Map</a>`;
+    output.innerHTML = `<h2>${country.name.common} ${country.flag}</h2>
+    <p>Capital: ${country.capital}</p>
+    <p>Region: ${country.region}</p>
+    <p>Language : ${Object.values(country.languages)}</p>
+    <p>Currency: ${Object.values(country.currencies).name}</p>
+    <p>Population: ${country.population.toLocaleString("de-DE")}</p>
+    <a href="${country.maps.googleMaps}">Map</a>`;
     //
-  } catch {}
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 async function getWeather() {
   try {
     const apiKey = "71f05fa9a67003870792a089b0de04e9";
-    const cityInput = capital;
+    const cityInput = await getCapital();
     console.log(cityInput);
     const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityInput}&appid=${apiKey}&units=metric`;
 
